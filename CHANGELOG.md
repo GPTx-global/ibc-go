@@ -34,6 +34,12 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 # Changelog
 
+## [v6.1.1-guru.1](https://github.com/GPTx-global/ibc-go/releases/tag/v6.1.1-guru.1) - 2025-01-21
+### Features 
+* Change cosmos-sdk to guru's
+* Modify testing
+
+
 ## [v6.1.1](https://github.com/cosmos/ibc-go/releases/tag/v6.1.1) - 2023-05-25
 
 ### Bug Fixes
