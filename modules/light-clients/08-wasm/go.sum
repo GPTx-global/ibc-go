@@ -198,6 +198,8 @@ cosmossdk.io/client/v2 v2.10.0-beta.1.0.20250114081937-a40ade9515cc h1:kdVRV1nKi
 cosmossdk.io/client/v2 v2.10.0-beta.1.0.20250114081937-a40ade9515cc/go.mod h1:o5kHjrWXvmFTLx6+ObaNWPyCAG7R6gmOXIm6ks9LE1c=
 cosmossdk.io/collections v1.0.0 h1:YCYIe/pIMtc1iLDD0OrVdfWCnIkpwdy7k9NSQpaR5mg=
 cosmossdk.io/collections v1.0.0/go.mod h1:mFfLxnYT1fV+B3Lx9GLap1qxmffIPqQCND4xBExerps=
+cosmossdk.io/collections v1.1.0 h1:UgfDUtQbRcA6uTrwd4Z6lhxMWhHPUTneXCHkWztyvMM=
+cosmossdk.io/collections v1.1.0/go.mod h1:D2iuLsFTDseILML+2rCnWIRFyFgl5cyveZ6kNTQALd4=
 cosmossdk.io/core v1.0.0 h1:e7XBbISOytLBOXMVwpRPixThXqEkeLGlg8no/qpgS8U=
 cosmossdk.io/core v1.0.0/go.mod h1:mKIp3RkoEmtqdEdFHxHwWAULRe+79gfdOvmArrLDbDc=
 cosmossdk.io/core/testing v0.0.1 h1:gYCTaftcRrz+HoNXmK7r9KgbG1jgBJ8pNzm/Pa/erFQ=

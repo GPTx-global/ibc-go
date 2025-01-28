@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	cosmossdk.io/api v0.8.1
 	cosmossdk.io/client/v2 v2.10.0-beta.1
-	cosmossdk.io/collections v1.0.0
+	cosmossdk.io/collections v1.1.0
 	cosmossdk.io/core v1.0.0
 	cosmossdk.io/errors v1.0.1
 	cosmossdk.io/log v1.5.0
