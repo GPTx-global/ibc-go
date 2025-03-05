@@ -22,7 +22,7 @@ require (
 	github.com/strangelove-ventures/interchaintest/v9 v9.0.0-20240917013455-e59965790e64
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/mod v0.22.0
+	golang.org/x/mod v0.24.0
 	google.golang.org/grpc v1.69.4
 	gopkg.in/yaml.v2 v2.4.0
 )
