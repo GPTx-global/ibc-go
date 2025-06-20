@@ -4,8 +4,26 @@
 
 ## Table of Contents
 
-- [ibc/applications/fee/v1/ack.proto](#ibc/applications/fee/v1/ack.proto)
-    - [IncentivizedAcknowledgement](#ibc.applications.fee.v1.IncentivizedAcknowledgement)
+- [ibc/applications/exchange/v1/exchange.proto](#ibc/applications/exchange/v1/exchange.proto)
+    - [DenomTrace](#ibc.applications.exchange.v1.DenomTrace)
+    - [Params](#ibc.applications.exchange.v1.Params)
+  
+- [ibc/applications/exchange/v1/genesis.proto](#ibc/applications/exchange/v1/genesis.proto)
+    - [GenesisState](#ibc.applications.exchange.v1.GenesisState)
+  
+- [ibc/applications/exchange/v1/query.proto](#ibc/applications/exchange/v1/query.proto)
+    - [QueryDenomHashRequest](#ibc.applications.exchange.v1.QueryDenomHashRequest)
+    - [QueryDenomHashResponse](#ibc.applications.exchange.v1.QueryDenomHashResponse)
+    - [QueryDenomTraceRequest](#ibc.applications.exchange.v1.QueryDenomTraceRequest)
+    - [QueryDenomTraceResponse](#ibc.applications.exchange.v1.QueryDenomTraceResponse)
+    - [QueryDenomTracesRequest](#ibc.applications.exchange.v1.QueryDenomTracesRequest)
+    - [QueryDenomTracesResponse](#ibc.applications.exchange.v1.QueryDenomTracesResponse)
+    - [QueryEscrowAddressRequest](#ibc.applications.exchange.v1.QueryEscrowAddressRequest)
+    - [QueryEscrowAddressResponse](#ibc.applications.exchange.v1.QueryEscrowAddressResponse)
+    - [QueryParamsRequest](#ibc.applications.exchange.v1.QueryParamsRequest)
+    - [QueryParamsResponse](#ibc.applications.exchange.v1.QueryParamsResponse)
+  
+    - [Query](#ibc.applications.exchange.v1.Query)
   
 - [ibc/core/client/v1/client.proto](#ibc/core/client/v1/client.proto)
     - [ClientConsensusStates](#ibc.core.client.v1.ClientConsensusStates)
@@ -15,6 +33,18 @@
     - [IdentifiedClientState](#ibc.core.client.v1.IdentifiedClientState)
     - [Params](#ibc.core.client.v1.Params)
     - [UpgradeProposal](#ibc.core.client.v1.UpgradeProposal)
+  
+- [ibc/applications/exchange/v1/tx.proto](#ibc/applications/exchange/v1/tx.proto)
+    - [MsgTeleport](#ibc.applications.exchange.v1.MsgTeleport)
+    - [MsgTeleportResponse](#ibc.applications.exchange.v1.MsgTeleportResponse)
+  
+    - [Msg](#ibc.applications.exchange.v1.Msg)
+  
+- [ibc/applications/exchange/v2/packet.proto](#ibc/applications/exchange/v2/packet.proto)
+    - [FungibleTokenPacketData](#ibc.applications.exchange.v2.FungibleTokenPacketData)
+  
+- [ibc/applications/fee/v1/ack.proto](#ibc/applications/fee/v1/ack.proto)
+    - [IncentivizedAcknowledgement](#ibc.applications.fee.v1.IncentivizedAcknowledgement)
   
 - [ibc/core/channel/v1/channel.proto](#ibc/core/channel/v1/channel.proto)
     - [Acknowledgement](#ibc.core.channel.v1.Acknowledgement)
@@ -361,24 +391,43 @@
 
 
 
-<a name="ibc/applications/fee/v1/ack.proto"></a>
+<a name="ibc/applications/exchange/v1/exchange.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## ibc/applications/fee/v1/ack.proto
+## ibc/applications/exchange/v1/exchange.proto
 
 
 
-<a name="ibc.applications.fee.v1.IncentivizedAcknowledgement"></a>
+<a name="ibc.applications.exchange.v1.DenomTrace"></a>
 
-### IncentivizedAcknowledgement
-IncentivizedAcknowledgement is the acknowledgement format to be used by applications wrapped in the fee middleware
+### DenomTrace
+DenomTrace contains the base denomination for ICS20 fungible tokens and the
+source tracing information path.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| `app_acknowledgement` | [bytes](#bytes) |  | the underlying app acknowledgement bytes |
-| `forward_relayer_address` | [string](#string) |  | the relayer address which submits the recv packet message |
-| `underlying_app_success` | [bool](#bool) |  | success flag of the base application callback |
+| `path` | [string](#string) |  | path defines the chain of port/channel identifiers used for tracing the source of the fungible token. |
+| `base_denom` | [string](#string) |  | base denomination of the relayed fungible token. |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.Params"></a>
+
+### Params
+Params defines the set of IBC transfer parameters.
+NOTE: To prevent a single token from being transferred, set the
+TransfersEnabled parameter to true and then set the bank module's SendEnabled
+parameter for the denomination to false.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `send_enabled` | [bool](#bool) |  | send_enabled enables or disables all cross-chain token transfers from this chain. |
+| `receive_enabled` | [bool](#bool) |  | receive_enabled enables or disables all cross-chain token transfers to this chain. |
 
 
 
@@ -389,6 +438,222 @@ IncentivizedAcknowledgement is the acknowledgement format to be used by applicat
  <!-- end enums -->
 
  <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="ibc/applications/exchange/v1/genesis.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/exchange/v1/genesis.proto
+
+
+
+<a name="ibc.applications.exchange.v1.GenesisState"></a>
+
+### GenesisState
+GenesisState defines the ibc-transfer genesis state
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `port_id` | [string](#string) |  |  |
+| `denom_traces` | [DenomTrace](#ibc.applications.exchange.v1.DenomTrace) | repeated |  |
+| `params` | [Params](#ibc.applications.exchange.v1.Params) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="ibc/applications/exchange/v1/query.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/exchange/v1/query.proto
+
+
+
+<a name="ibc.applications.exchange.v1.QueryDenomHashRequest"></a>
+
+### QueryDenomHashRequest
+QueryDenomHashRequest is the request type for the Query/DenomHash RPC
+method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `trace` | [string](#string) |  | The denomination trace ([port_id]/[channel_id])+/[denom] |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryDenomHashResponse"></a>
+
+### QueryDenomHashResponse
+QueryDenomHashResponse is the response type for the Query/DenomHash RPC
+method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `hash` | [string](#string) |  | hash (in hex format) of the denomination trace information. |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryDenomTraceRequest"></a>
+
+### QueryDenomTraceRequest
+QueryDenomTraceRequest is the request type for the Query/DenomTrace RPC
+method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `hash` | [string](#string) |  | hash (in hex format) or denom (full denom with ibc prefix) of the denomination trace information. |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryDenomTraceResponse"></a>
+
+### QueryDenomTraceResponse
+QueryDenomTraceResponse is the response type for the Query/DenomTrace RPC
+method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `denom_trace` | [DenomTrace](#ibc.applications.exchange.v1.DenomTrace) |  | denom_trace returns the requested denomination trace information. |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryDenomTracesRequest"></a>
+
+### QueryDenomTracesRequest
+QueryConnectionsRequest is the request type for the Query/DenomTraces RPC
+method
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `pagination` | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  | pagination defines an optional pagination for the request. |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryDenomTracesResponse"></a>
+
+### QueryDenomTracesResponse
+QueryConnectionsResponse is the response type for the Query/DenomTraces RPC
+method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `denom_traces` | [DenomTrace](#ibc.applications.exchange.v1.DenomTrace) | repeated | denom_traces returns all denominations trace information. |
+| `pagination` | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  | pagination defines the pagination in the response. |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryEscrowAddressRequest"></a>
+
+### QueryEscrowAddressRequest
+QueryEscrowAddressRequest is the request type for the EscrowAddress RPC method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `port_id` | [string](#string) |  | unique port identifier |
+| `channel_id` | [string](#string) |  | unique channel identifier |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryEscrowAddressResponse"></a>
+
+### QueryEscrowAddressResponse
+QueryEscrowAddressResponse is the response type of the EscrowAddress RPC method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `escrow_address` | [string](#string) |  | the escrow account address |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryParamsRequest"></a>
+
+### QueryParamsRequest
+QueryParamsRequest is the request type for the Query/Params RPC method.
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.QueryParamsResponse"></a>
+
+### QueryParamsResponse
+QueryParamsResponse is the response type for the Query/Params RPC method.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `params` | [Params](#ibc.applications.exchange.v1.Params) |  | params defines the parameters of the module. |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="ibc.applications.exchange.v1.Query"></a>
+
+### Query
+Query provides defines the gRPC querier service.
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `DenomTrace` | [QueryDenomTraceRequest](#ibc.applications.exchange.v1.QueryDenomTraceRequest) | [QueryDenomTraceResponse](#ibc.applications.exchange.v1.QueryDenomTraceResponse) | DenomTrace queries a denomination trace information. | GET|/ibc/apps/exchange/v1/denom_traces/{hash}|
+| `DenomTraces` | [QueryDenomTracesRequest](#ibc.applications.exchange.v1.QueryDenomTracesRequest) | [QueryDenomTracesResponse](#ibc.applications.exchange.v1.QueryDenomTracesResponse) | DenomTraces queries all denomination traces. | GET|/ibc/apps/exchange/v1/denom_traces|
+| `Params` | [QueryParamsRequest](#ibc.applications.exchange.v1.QueryParamsRequest) | [QueryParamsResponse](#ibc.applications.exchange.v1.QueryParamsResponse) | Params queries all parameters of the ibc-exchange module. | GET|/ibc/apps/exchange/v1/params|
+| `DenomHash` | [QueryDenomHashRequest](#ibc.applications.exchange.v1.QueryDenomHashRequest) | [QueryDenomHashResponse](#ibc.applications.exchange.v1.QueryDenomHashResponse) | DenomHash queries a denomination hash information. | GET|/ibc/apps/exchange/v1/denom_hashes/{trace}|
+| `EscrowAddress` | [QueryEscrowAddressRequest](#ibc.applications.exchange.v1.QueryEscrowAddressRequest) | [QueryEscrowAddressResponse](#ibc.applications.exchange.v1.QueryEscrowAddressResponse) | EscrowAddress returns the escrow address for a particular port and channel id. | GET|/ibc/apps/exchange/v1/channels/{channel_id}/ports/{port_id}/escrow_address|
 
  <!-- end services -->
 
@@ -526,6 +791,144 @@ upgrade.
 | `description` | [string](#string) |  |  |
 | `plan` | [cosmos.upgrade.v1beta1.Plan](#cosmos.upgrade.v1beta1.Plan) |  |  |
 | `upgraded_client_state` | [google.protobuf.Any](#google.protobuf.Any) |  | An UpgradedClientState must be provided to perform an IBC breaking upgrade. This will make the chain commit to the correct upgraded (self) client state before the upgrade occurs, so that connecting chains can verify that the new upgraded client is valid by verifying a proof on the previous version of the chain. This will allow IBC connections to persist smoothly across planned chain upgrades |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="ibc/applications/exchange/v1/tx.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/exchange/v1/tx.proto
+
+
+
+<a name="ibc.applications.exchange.v1.MsgTeleport"></a>
+
+### MsgTeleport
+MsgTeleport defines a msg to telefort fungible tokens (i.e Coins) between
+ICS20 enabled chains through intermediary chain.
+Built for the purpose of transferring the coins with custom data that can be used in the intermediary chain.
+The intermediary chain should enable the token swap and transfer to the destination chain.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `source_port` | [string](#string) |  | the port on which the packet will be sent |
+| `source_channel` | [string](#string) |  | the channel by which the packet will be sent |
+| `token` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  | the tokens to be transferred |
+| `sender` | [string](#string) |  | the sender address |
+| `receiver` | [string](#string) |  | the recipient address on the destination chain |
+| `timeout_height` | [ibc.core.client.v1.Height](#ibc.core.client.v1.Height) |  | Timeout height relative to the current block height. The timeout is disabled when set to 0. |
+| `timeout_timestamp` | [uint64](#uint64) |  | Timeout timestamp in absolute nanoseconds since unix epoch. The timeout is disabled when set to 0. |
+| `memo` | [string](#string) |  | optional memo |
+| `args` | [string](#string) | repeated | optional args |
+
+
+
+
+
+
+<a name="ibc.applications.exchange.v1.MsgTeleportResponse"></a>
+
+### MsgTeleportResponse
+MsgTeleportResponse defines the Msg/Teleport response type.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `sequence` | [uint64](#uint64) |  | sequence number of the teleport packet sent |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="ibc.applications.exchange.v1.Msg"></a>
+
+### Msg
+Msg defines the ibc/exchange Msg service.
+
+| Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
+| ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `Teleport` | [MsgTeleport](#ibc.applications.exchange.v1.MsgTeleport) | [MsgTeleportResponse](#ibc.applications.exchange.v1.MsgTeleportResponse) | Teleport defines a rpc handler method for MsgTeleport. | |
+
+ <!-- end services -->
+
+
+
+<a name="ibc/applications/exchange/v2/packet.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/exchange/v2/packet.proto
+
+
+
+<a name="ibc.applications.exchange.v2.FungibleTokenPacketData"></a>
+
+### FungibleTokenPacketData
+FungibleTokenPacketData defines a struct for the packet payload
+See FungibleTokenPacketData spec:
+https://github.com/cosmos/ibc/tree/master/spec/app/ics-020-fungible-token-transfer#data-structures
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `denom` | [string](#string) |  | the token denomination to be transferred |
+| `amount` | [string](#string) |  | the token amount to be transferred |
+| `sender` | [string](#string) |  | the sender address |
+| `receiver` | [string](#string) |  | the recipient address on the destination chain |
+| `memo` | [string](#string) |  | optional memo |
+| `args` | [string](#string) | repeated | optional args |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
+<a name="ibc/applications/fee/v1/ack.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## ibc/applications/fee/v1/ack.proto
+
+
+
+<a name="ibc.applications.fee.v1.IncentivizedAcknowledgement"></a>
+
+### IncentivizedAcknowledgement
+IncentivizedAcknowledgement is the acknowledgement format to be used by applications wrapped in the fee middleware
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `app_acknowledgement` | [bytes](#bytes) |  | the underlying app acknowledgement bytes |
+| `forward_relayer_address` | [string](#string) |  | the relayer address which submits the recv packet message |
+| `underlying_app_success` | [bool](#bool) |  | success flag of the base application callback |
 
 
 
